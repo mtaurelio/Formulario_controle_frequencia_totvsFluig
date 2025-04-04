@@ -1,0 +1,6 @@
+function beforeSendValidate(numState, nextState) {
+  var indexes = form.getChildrenIndexes("tabelaFilho");
+  if (indexes.length === 0) {
+      throw "Adicione pelo menos um item à tabela filho antes de enviar o formulário.";
+  }
+}

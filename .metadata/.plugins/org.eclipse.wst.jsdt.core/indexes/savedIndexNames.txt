@@ -1,0 +1,18 @@
+INDEX VERSION 1.3+C:\Fluig\Formulario de ponto\.metadata\.plugins\org.eclipse.wst.jsdt.core\indexes
+3687651186.index
+3260329989.index
+2712253786.index
+4285392267.index
+2489485556.index
+4103774234.index
+2993627404.index
+2778366931.index
+3526454402.index
+2191575859.index
+4034654816.index
+528946045.index
+3382000151.index
+945478762.index
+808537133.index
+1903782877.index
+3968373900.index

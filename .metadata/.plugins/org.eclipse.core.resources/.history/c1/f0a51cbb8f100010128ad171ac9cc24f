@@ -1,0 +1,30 @@
+// function defineStructure() {
+
+// }
+// function onSync(lastSyncDate) {
+
+// }
+// function createDataset(fields, constraints, sortFields) {
+//   var datasetRegistro = DatasetBuilder.newDataset();
+
+//   // Definir as colunas
+//   datasetRegistro.addColumn("matricula");
+//   datasetRegistro.addColumn("nome");
+//   datasetRegistro.addColumn("departamento");
+
+
+//   // Adicionar os setores
+//   datasetRegistro.addRow(["001", "Matheus Aurelio"]);
+//   datasetRegistro.addRow(["002", "Maria Luiza"]);
+//   datasetRegistro.addRow(["003", "Ana Luiza Oliveira"]);
+//   datasetRegistro.addRow(["004", "Rubens Feliciano"]);
+//   datasetRegistro.addRow(["005", "Leonardo Lima"]);
+//   datasetRegistro.addRow(["006", "Jessica Lima"]);
+//   datasetRegistro.addRow(["007", "Laura Maria"]);
+//   datasetRegistro.addRow(["008", "Luiz Miguel"]);
+
+//   return datasetRegistro;
+
+// }function onMobileSync(user) {
+
+// }

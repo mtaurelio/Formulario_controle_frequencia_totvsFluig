@@ -1,0 +1,189 @@
+
+function toggleRegistros(id) {
+  var elemento = document.getElementById(id);
+  elemento.style.display = elemento.style.display === "none" ? "table-row" : "none";
+  
+  var button = document.querySelector('[data-child="' + id + '"] button');
+  var icon = button.querySelector('.fluigicon');
+  
+  if (elemento.style.display === "none") {
+      icon.classList.remove('fluigicon-minus');
+      icon.classList.add('fluigicon-plus');
+      button.innerHTML = '<span class="fluigicon fluigicon-plus"></span> Ver Registros';
+  } else {
+      icon.classList.remove('fluigicon-plus');
+      icon.classList.add('fluigicon-minus');
+      button.innerHTML = '<span class="fluigicon fluigicon-minus"></span> Ocultar Registros';
+  }
+}
+
+document.querySelectorAll(".horario").forEach(function(input) {
+  input.addEventListener("change", function() {
+      calcularTotalHoras(this.dataset.id);
+  });
+});
+
+function calcularTotalHoras(id) {
+  let entrada = document.querySelector('input[name="entrada' + id + '"]').value;
+  let saidaAlmoco = document.querySelector('input[name="saidaAlmoco' + id + '"]').value;
+  let retornoAlmoco = document.querySelector('input[name="retornoAlmoco' + id + '"]').value;
+  let saida = document.querySelector('input[name="saida' + id + '"]').value;
+  
+  if (entrada && saidaAlmoco && retornoAlmoco && saida) {
+      let inicio = new Date('1970-01-01T' + entrada + ':00');
+      let almoco = new Date('1970-01-01T' + saidaAlmoco + ':00');
+      let retorno = new Date('1970-01-01T' + retornoAlmoco + ':00');
+      let fim = new Date('1970-01-01T' + saida + ':00');
+
+      let horasAntesAlmoco = (almoco - inicio) / (1000 * 60 * 60);
+      let horasDepoisAlmoco = (fim - retorno) / (1000 * 60 * 60);
+      let horasTrabalhadas = horasAntesAlmoco + horasDepoisAlmoco;
+
+      document.querySelector('input[name="totalHoras' + id + '"]').value = horasTrabalhadas.toFixed(2);
+  } else {
+      document.querySelector('input[name="totalHoras' + id + '"]').value = "";
+  }
+}
+
+
+function duplicarLinha() {
+try {
+// 1. Localizar a tabela e as linhas existentes
+var tabela = document.getElementById('tabelaRegistros');
+var linhasPai = tabela.querySelectorAll('tr[data-child]');
+var ultimoId = linhasPai.length > 0 ? 
+  parseInt(linhasPai[linhasPai.length-1].getAttribute('data-child').split('_')[1]) : 0;
+var novoId = ultimoId + 1;
+
+// 2. Clonar a estrutura base (primeira linha se não existirem outras)
+var modeloPai = linhasPai.length > 0 ? linhasPai[linhasPai.length-1] : tabela.querySelector('tr[data-child]');
+var modeloFilho = document.getElementById(modeloPai.getAttribute('data-child'));
+
+// 3. Criar nova linha pai
+var novaLinhaPai = modeloPai.cloneNode(true);
+novaLinhaPai.setAttribute('data-child', 'day_' + novoId);
+
+// 4. Atualizar inputs da linha pai
+novaLinhaPai.querySelectorAll('input').forEach(function(input) {
+  var name = input.getAttribute('name');
+  if(name) {
+var newName = name.replace(/(\D+)\d+$/, '$1' + novoId);
+input.setAttribute('name', newName);
+}
+input.value = '';
+});
+
+// 5. Configurar botão de toggle
+var botao = novaLinhaPai.querySelector('button');
+botao.setAttribute('onclick', 'toggleRegistros(\'day_' + novoId + '\')');
+botao.innerHTML = '<span class="fluigicon fluigicon-plus"></span> Ver Registros';
+
+// 6. Criar nova linha filha
+var novaLinhaFilho = modeloFilho.cloneNode(true);
+novaLinhaFilho.id = 'day_' + novoId;
+novaLinhaFilho.style.display = 'none';
+
+// 7. Atualizar inputs da linha filha
+novaLinhaFilho.querySelectorAll('input').forEach(function(input) {
+  var name = input.getAttribute('name');
+  if(name) input.setAttribute('name', name.replace(/\d+$/, novoId));
+  input.value = '';
+  if(input.classList.contains('horario')) {
+      input.setAttribute('data-id', novoId);
+      input.addEventListener('change', function() {
+          calcularTotalHoras(this.getAttribute('data-id'));
+      });
+  }
+});
+
+// 8. Adicionar novas linhas à tabela
+tabela.querySelector('tbody').appendChild(novaLinhaPai);
+tabela.querySelector('tbody').appendChild(novaLinhaFilho);
+
+} catch(e) {
+console.error('Erro ao duplicar linha:', e);
+FLUIGC.toast({
+  title: 'Erro',
+  message: 'Ocorreu um erro ao adicionar novo dia',
+  type: 'warning'
+});
+}
+}
+
+
+// SALVAR FORMULÁRIO
+
+function salvarFormulario() {
+try {
+var indexes = [];
+var linhas = document.querySelectorAll('tr[data-child]');
+
+// 1. Percorrer todas as linhas da tabela Pai e Filho
+linhas.forEach(function(linha) {
+  var id = linha.getAttribute('data-child').split('_')[1];
+
+  // 2. Criar um novo índice para cada linha
+  var newIndex = wdkAddChild('tabelaRegistros'); // Adiciona uma nova linha no Fluig
+  indexes.push(newIndex);
+
+  // 3. Preencher os campos na tabela Pai e Filho com os dados capturados
+  document.querySelector('input[name="data___' + newIndex + '"]').value = linha.querySelector('input[name="data' + id + '"]').value;
+  document.querySelector('input[name="diasemana___' + newIndex + '"]').value = linha.querySelector('input[name="diasemana' + id + '"]').value;
+  document.querySelector('input[name="totalHoras___' + newIndex + '"]').value = linha.querySelector('input[name="totalHoras' + id + '"]').value;
+  document.querySelector('input[name="entrada___' + newIndex + '"]').value = document.querySelector('input[name="entrada' + id + '"]').value;
+  document.querySelector('input[name="saidaAlmoco___' + newIndex + '"]').value = document.querySelector('input[name="saidaAlmoco' + id + '"]').value;
+  document.querySelector('input[name="retornoAlmoco___' + newIndex + '"]').value = document.querySelector('input[name="retornoAlmoco' + id + '"]').value;
+  document.querySelector('input[name="saida___' + newIndex + '"]').value = document.querySelector('input[name="saida' + id + '"]').value;
+});
+
+FLUIGC.toast({
+  title: 'Sucesso!',
+  message: 'Registros adicionados com sucesso.',
+  type: 'success'
+});
+
+} catch (e) {
+console.error('Erro ao salvar:', e);
+FLUIGC.toast({
+  title: 'Erro!',
+  message: 'Ocorreu um erro ao salvar os registros.',
+  type: 'danger'
+});
+}
+}
+
+function saveAllRecords(records) {
+var dataset = DatasetFactory.getDataset("dsFrequencia", null, null, null);
+
+// Limpar dataset existente se necessário
+// DatasetFactory.deleteDataset("dsFrequencia");
+
+// Adicionar todos os registros
+for(var i = 0; i < records.length; i++) {
+var newRecord = DatasetFactory.newDatasetRecord("dsFrequencia");
+
+// Mapear campos do registro para o dataset
+for(var field in records[i]) {
+  if(records[i].hasOwnProperty(field)) {
+      newRecord.setField(field, records[i][field]);
+  }
+}
+
+dataset.addRecord(newRecord);
+}
+
+// Salvar dataset
+return DatasetFactory.saveDataset("dsFrequencia", dataset);
+
+}
+
+function setSelectedZoomItem(selectedItem) {
+if (selectedItem.inputId === "matriculaZoom") { 
+// Preenche o campo Nome Completo
+document.getElementById("nome").value = selectedItem["nome"];
+// Se houver mais campos, adicione aqui
+document.getElementById("departamento").value = selectedItem["departamento"];
+
+}
+}
+
