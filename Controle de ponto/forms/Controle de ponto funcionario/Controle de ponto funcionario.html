@@ -5,6 +5,8 @@
 	<script type="text/javascript" src="/portal/resources/js/jquery/jquery-ui.min.js"></script>
 	<script type="text/javascript" src="/portal/resources/js/mustache/mustache-min.js"></script>
 	<script type="text/javascript" src="/style-guide/js/fluig-style-guide.min.js" charset="utf-8"></script>
+	<script src="./scriptform.js"></script>
+
 </head>
 <body>
 <div class="fluig-style-guide">
@@ -58,66 +60,70 @@
 				</div>
 		
 					<!-- Tabela PAI Principal de Registros de Dia -->
+<!-- Tabela Pai -->
+<div class="fluig-style-guide">
+  <table tablename="tabelaRegistros" class="table table-bordered table-striped" id="tabelaRegistros">
+    <thead>
+      <tr>
+        <th>Data</th>
+        <th>Dia da Semana</th>
+        <th>Total Horas</th>
+        <th>Detalhes</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Linha Pai -->
+      <tr data-child="day_0">
+        <td><input type="date" name="data0"></td>
+        <td><input type="text" name="diasemana0"></td>
+        <td><input type="text" name="totalHoras0" readonly></td>
+        <td>
+          <button class="btn btn-xs btn-default" onclick="toggleRegistros('day_0')">
+            <span class="fluigicon fluigicon-plus"></span> Ver Registros
+          </button>
+        </td>
+      </tr>
 
-					<div class="fluig-style-guide">
-						<table class="table table-bordered table-striped" id="tabelaRegistros">
-								<thead>
-										<tr>
-												<th>Data</th>
-												<th>Dia da Semana</th>
-												<th>Total Horas</th>
-												<th>Detalhes</th>
-										</tr>
-								</thead>
-								<tbody>
-										<tr data-child="day_01">
-												<td><input type="date" name="data1"></td>
-												<td><input type="text" name="diasemana1"></td>
-												<td><input type="text" name="totalHoras1" readonly></td>
-												<td>
-														<button class="btn btn-xs btn-default" onclick="toggleRegistros('day_01')">
-																<span class="fluigicon fluigicon-plus"></span> Ver Registros
-														</button>
-												</td>
-										</tr>
-										<tr id="day_01" style="display:none;">
-												<td colspan="4">
-														<table class="table table-condensed">
-																<thead>
-																		<tr>
-																				<th>Tipo</th>
-																				<th>Horário</th>
-																				<th>Descrição das Atividades</th>
-																		</tr>
-																</thead>
-																<tbody>
-																		<tr>
-																				<td>Entrada</td>
-																				<td><input type="time" name="entrada1" class="horario" data-id="1"></td>
-																				<td><input type="text" name="descricao1"></td>
-																		</tr>
-																		<tr>
-																				<td>Saída Almoço</td>
-																				<td><input type="time" name="saidaAlmoco1" class="horario" data-id="1"></td>
-																				<td><input type="text" name="descricao2"></td>
-																		</tr>
-																		<tr>
-																				<td>Retorno Almoço</td>
-																				<td><input type="time" name="retornoAlmoco1" class="horario" data-id="1"></td>
-																				<td><input type="text" name="descricao3"></td>
-																		</tr>
-																		<tr>
-																				<td>Saída</td>
-																				<td><input type="time" name="saida1" class="horario" data-id="1"></td>
-																				<td><input type="text" name="descricao4"></td>
-																		</tr>
-																</tbody>
-														</table>
-												</td>
-										</tr>
-								</tbody>
-						</table>
-				</div>
+      <!-- Linha Filho (Detalhes do dia) -->
+      <tr id="day_0" style="display:none;">
+        <td colspan="4">
+          <table class="table table-condensed">
+            <thead>
+              <tr>
+                <th>Tipo</th>
+                <th>Horário</th>
+                <th>Descrição das Atividades</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Entrada</td>
+                <td><input type="time" name="entrada0" class="horario" data-id="0"></td>
+                <td><input type="text" name="descricaoEntrada"></td>
+              </tr>
+              <tr>
+                <td>Saída Almoço</td>
+                <td><input type="time" name="saidaAlmoco0" class="horario" data-id="0"></td>
+                <td><input type="text" name="descricaoAlmoco"></td>
+              </tr>
+              <tr>
+                <td>Retorno Almoço</td>
+                <td><input type="time" name="retornoAlmoco0" class="horario" data-id="0"></td>
+                <td><input type="text" name="descricaoRetorno"></td>
+              </tr>
+              <tr>
+                <td>Saída</td>
+                <td><input type="time" name="saida0" class="horario" data-id="0"></td>
+                <td><input type="text" name="descricaoSaida"></td>
+              </tr>
+            </tbody>
+          </table>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
 				<div class="form-group col-md-1">
 					<span class="input-group-btn">
 						<button class="btn btn-default" type="button" onclick="duplicarLinha()">
@@ -131,6 +137,5 @@
 </div>
 
 
-<script src="./scriptform.js"></script>
 </body>
 </html>
